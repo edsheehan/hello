@@ -5,6 +5,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
+
 # Define a function to calculate the support state of an app based on support dates
 def support_state(row):
     td = pd.Timestamp.today().normalize()
@@ -18,6 +19,7 @@ def support_state(row):
         return 'Normal Support'
     else:
         return 'Undefined'
+
 
 # Define the file path of the CSV file containing the data
 file_path = 'C:/Users/ed/OneDrive/Documents/software.csv'
@@ -38,22 +40,22 @@ filter_df = df[df['Phase'].isin(allowed_values)]
 
 # Pivot the DataFrame to create a new DataFrame with 'AppID' as the index and 'Phase' as the columns.
 pivoted_df = filter_df.pivot(index='AppID', columns='Phase', values='Date')
-pivoted_df.columns=['End of Extended Support', 'End of Support', 'General Availability']
+pivoted_df.columns = ['End of Extended Support', 'End of Support', 'General Availability']
 pivoted_df = pivoted_df[['General Availability', 'End of Support', 'End of Extended Support']]
 
 # Create a new DataFrame with 'AppID' and 'Name' columns from the original DataFrame.
-dfapps = df[['AppID', 'Name']].copy()
-dfapps.drop_duplicates(subset=['AppID'], keep='last', inplace=True)
+mudflaps = df[['AppID', 'Name']].copy()
+mudflaps.drop_duplicates(subset=['AppID'], keep='last', inplace=True)
 
 # Merge the two DataFrames on 'AppID'.
-dfapps = dfapps.set_index('AppID')
-dfcombined = pd.merge(dfapps, pivoted_df, on='AppID', how='left')
+mudflaps = mudflaps.set_index('AppID')
+combined = pd.merge(mudflaps, pivoted_df, on='AppID', how='left')
 
 # Apply the support_state function to each row of the DataFrame.
-dfcombined['Support State'] = dfcombined.apply(support_state, axis=1)
-dfcombined['General Availability'] = dfcombined['General Availability'].dt.strftime('%Y-%m-%d')
-dfcombined['End of Support'] = dfcombined['End of Support'].dt.strftime('%Y-%m-%d')
-dfcombined['End of Extended Support'] = dfcombined['End of Extended Support'].dt.strftime('%Y-%m-%d')
-dfcombined.fillna('', inplace=True)
+combined['Support State'] = combined.apply(support_state, axis=1)
+combined['General Availability'] = combined['General Availability'].dt.strftime('%Y-%m-%d')
+combined['End of Support'] = combined['End of Support'].dt.strftime('%Y-%m-%d')
+combined['End of Extended Support'] = combined['End of Extended Support'].dt.strftime('%Y-%m-%d')
+combined.fillna('', inplace=True)
 
-print(dfcombined)
+print(combined)
