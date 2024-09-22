@@ -1,3 +1,9 @@
+<style>
+mark{
+    color:red;
+}
+</style>
+
 # Hello
 
 | Sample | New     |   |   |   |
@@ -6,4 +12,4 @@
 |        |         |   |   |   |
 |        |         |   |   |   |
 
-## Thinking
+## <mark>Thinking</mark>
